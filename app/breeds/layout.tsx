@@ -1,7 +1,7 @@
 import React from 'react';
 export default function BreedsLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
+    <div >
       {children}
     </div>
   );
