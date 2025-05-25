@@ -29,18 +29,27 @@ export default function DogList({ breeds }: { breeds: DogBreed[] }) {
 
   return (
     <>
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
-      {breeds.slice(0, visibleCount).map((breed) => (
-        <Link href={`/breeds/${breed.id}`} key={breed.id}>
-        <div className="bg-white p-4 rounded-2xl shadow-md border hover:shadow-lg transition-all cursor-pointer transform hover:scale-105 hover:border-blue-500">
-          <h2 className="text-lg font-semibold mb-2 text-blue-600">{breed.name}</h2>
-          {breed.description && (
-            <p className="text-gray-600 text-sm">{breed.description}</p>
-          )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+        {breeds.slice(0, visibleCount).map((breed) => (
+            <Link href={`/breeds/${breed.id}`} key={breed.id}>
+            <div className="bg-white p-4 rounded-2xl shadow-md border hover:shadow-lg transition-all cursor-pointer transform hover:scale-105 hover:border-blue-500 h-38">
+            <h2 className="text-lg font-semibold mb-2 text-blue-600">{breed.name}</h2>
+            {breed.description && (
+                <p className="text-gray-600 text-sm overflow-hidden line-clamp-4">
+                {breed.description}
+                </p>
+            )}
+
+            {breed.life && (
+                <p className="text-gray-500 text-xs">
+                    <strong>Lifespan:</strong> {`${breed.life.min} - ${breed.life.max} years`}
+                </p>
+            )}
+            </div>
+            </Link>
+        ))}
         </div>
-        </Link>
-      ))}
-    </div>
+
       {/* Trigger loading */}
       {visibleCount < breeds.length && (
         <div
