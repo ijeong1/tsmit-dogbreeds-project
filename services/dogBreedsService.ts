@@ -40,8 +40,10 @@ export async function fetchDogBreedById(id: string): Promise<DogBreedsById> {
     try {
         const response = await axios.get(`https://dogapi.dog/api/v2/breeds/${id}`);
         const breed = response.data.data;
-        // const favorite = await FavoriteBreedService.getFavoriteByBreedId(id);
 
+        const imageUrl = await fetchDogBreedImage(breed.attributes.name);
+        breed.attributes.imageUrl = imageUrl;
+        // const favorite = await FavoriteBreedService.getFavoriteByBreedId(id);
         return {
             ...breed,
             // memo: favorite?.memo ?? undefined,
@@ -57,10 +59,14 @@ export async function fetchDogBreedById(id: string): Promise<DogBreedsById> {
 
 export async function fetchDogBreedImage(breedName: string): Promise<string> {
     try{
-        const res = await axios.get(`https://dog.ceo/api/breed/${breedName}/images/random`);
+        if (!breedName) {
+            return '/dog-placeholder.png';
+        }
+        const normalizedName = breedName.toLowerCase().replace(/\s+/g, '');
+        const res = await axios.get(`https://dog.ceo/api/breed/${normalizedName}/images/random`);
         return res.data.message;
     } catch (error) {
         console.warn(`No image found for breed: ${breedName}`);
-        return '';
+        return '/dog-placeholder.png';
     }
 }

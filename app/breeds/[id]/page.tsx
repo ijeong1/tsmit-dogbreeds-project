@@ -16,34 +16,16 @@ async function getBreedById(id: string): Promise<DogBreedsById | null> {
   }
 }
 
-async function getBreedImage(breedName: string): Promise<string> {
-  const formattedName = breedName.toLowerCase().replace(/\s+/g, '');
-  try {
-    const res = await axios.get(
-      `https://dog.ceo/api/breed/${formattedName}/images/random`
-    );
-    return res.data.message;
-  } catch (error) {
-    console.warn(`No image found for breed: ${breedName}`);
-    return '/dog-placeholder.png';
-  }
-}
-
 export default async function BreedDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const breed = await getBreedById(id);
   if (!breed) return notFound();
 
-  let imageUrl = '/dog-placeholder.png';
-  try {
-    imageUrl = await getBreedImage(breed.attributes.name);
-  } catch {}
-
   return (
     <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-xl shadow-md">
       <div className="flex flex-col items-center">
         <Image
-          src={imageUrl}
+          src={breed.attributes.imageUrl || '/placeholder.png'}
           alt={breed.attributes.name}
           width={300}
           height={300}
