@@ -13,6 +13,7 @@ export interface DogBreed {
 export interface DogBreedsById {
     id: string;
     attributes: {
+        imageUrl: string;
         name: string;
         description: string;
         life: {
