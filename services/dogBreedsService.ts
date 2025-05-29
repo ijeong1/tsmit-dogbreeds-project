@@ -1,6 +1,6 @@
 import axios from "axios";
 import {DogBreed, DogBreedsById} from "@/types/DogBreed";
-// import * as FavoriteBreedService from "@/services/favoriteBreedService";
+import * as FavoriteBreedService from '@/services/favoriteBreedService';
 
 export async function fetchAllDogBreeds(): Promise<DogBreed[]> {
     try {
@@ -43,10 +43,12 @@ export async function fetchDogBreedById(id: string): Promise<DogBreedsById> {
 
         const imageUrl = await fetchDogBreedImage(breed.attributes.name);
         breed.attributes.imageUrl = imageUrl;
-        // const favorite = await FavoriteBreedService.getFavoriteByBreedId(id);
+        const favorite = await FavoriteBreedService.getFavoriteByBreedId(id);
+
         return {
             ...breed,
-            // memo: favorite?.memo ?? undefined,
+            memo: favorite?.memo ?? undefined,
+            isFavorite: favorite ? true : false,
         };
     } catch (err) {
         console.error("Fetch error:", err);

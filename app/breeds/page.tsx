@@ -6,8 +6,13 @@ import { Suspense } from 'react';
 import Loading from './loading';
 
 async function getBreeds(): Promise<DogBreed[]> {
-  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/breeds`);
-  return res.data;
+  try {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/breeds`);
+    return res.data;
+  } catch (error: any) {
+    console.error("getBreeds() error:", error?.message);
+    throw error;
+  }
 }
 
 export default async function BreedsPage() {

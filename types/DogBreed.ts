@@ -31,5 +31,6 @@ export interface DogBreedsById {
     };
     memo?: string;
     type: string;
-    imageUrl?: string 
+    imageUrl?: string
+    isFavorite?: boolean;
 }

@@ -15,7 +15,7 @@ export default function Navbar() {
     ];
 
     return (
-        <nav className="flex items-center justify-between flex-wrap bg-teal-500 p-6 sticky top-0 z-50">
+        <nav className="flex items-center justify-between flex-wrap bg-gray-800 p-6 sticky top-0 z-50">
             {/* Logo */}
             <div className="flex items-center flex-shrink-0 text-white mr-6">
                 <svg className="fill-current h-8 w-8 mr-2" width="54" height="54" viewBox="0 0 54 54">
@@ -56,10 +56,19 @@ export default function Navbar() {
                             key={item.label}
                             href={item.href}
                             className={`block mt-4 lg:inline-block lg:mt-0 mr-4 
-                                ${pathname === item.href ? "text-white font-bold underline" : "text-teal-200 hover:text-white"}`}
+                                ${
+                                    item.href === "/"
+                                        ? pathname === "/"
+                                            ? "text-white font-bold underline"
+                                            : "text-teal-200 hover:text-white"
+                                        : pathname.startsWith(item.href)
+                                            ? "text-white font-bold underline"
+                                            : "text-teal-200 hover:text-white"
+                                }`}
                         >
                             {item.label}
                         </Link>
+
                     ))}
                 </div>
             </div>

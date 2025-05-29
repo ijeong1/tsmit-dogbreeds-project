@@ -11,9 +11,10 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     if (!breed) {
       return NextResponse.json({ error: 'Dog Breed Not Found' }, { status: 404 });
     }
-    return NextResponse.json(breed);
+    return NextResponse.json(
+      JSON.parse(JSON.stringify(breed, (_, value) => (typeof value === 'bigint' ? value.toString() : value)))
+    );
     } catch (error) {
-        console.error('Error fetching dog breed by ID:', error);
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-    }
+        console.error('Error fetching dog breed by ID:', error);return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
 }
