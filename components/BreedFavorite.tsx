@@ -27,10 +27,12 @@ export default function BreedFavorite({
             if (isFavoriteState) {
                 await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/favorite-breeds/${breedId}`);
             } else {
-                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/favorite-breeds`, {
-                    breedId,
-                    memo: memo.trim(),
-                });
+                if (!isLoading) {
+                    await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/favorite-breeds`, {
+                        breedId,
+                        memo: memo.trim(),
+                    });
+                }
             }
 
             setIsFavoriteState(!isFavoriteState);
