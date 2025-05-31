@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Sidebar from "@/components/Sidebar";
 import { usePathname } from "next/navigation";
+import FabButton from "@/components/FabButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +29,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
+  const handleClick = () => {
+    console.log("Floating Action Button clicked!");
+  };
   return (
     <html lang="en">
       <body
@@ -47,7 +51,7 @@ export default function RootLayout({
             {children}
           </main>
         </div>
-        
+        <FabButton onClick={handleClick}>+</FabButton>
         <Footer />
       </body>
     </html>

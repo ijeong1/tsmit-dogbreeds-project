@@ -1,27 +1,12 @@
 import { prisma } from '@/lib/prismaClient';
-import { supabase } from '@/lib/supabaseClient';
+// import { supabase } from '@/lib/supabaseClient';
 import * as DogBreedsService from "@/services/dogBreedsService";
-import { get } from 'http';
-
 
 export async function addFavoriteBreed(breedId: string, memo?: string) {
-    // Supabase query method
-    // const {data, error} = await supabase
-    //     .from('favorite_breeds')
-    //     .insert([{ breed_id: breedId, memo: memo }])
-    //     .single(); // return single row
-    
-    // if (error) {
-    //     console.error('Error adding favorite breed:', error);
-    //     throw new Error('Failed to add favorite breed');
-    // }
-    // return breedId;
-
     const createFavorite = prisma.favorite_breeds.create({
             data: { breeds_id: breedId, memo: memo }
         }
     )
-
     return createFavorite;
 }
 
