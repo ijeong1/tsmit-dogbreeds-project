@@ -29,9 +29,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const handleClick = () => {
-    console.log("Floating Action Button clicked!");
-  };
   return (
     <html lang="en">
       <body
@@ -51,7 +48,7 @@ export default function RootLayout({
             {children}
           </main>
         </div>
-        <FabButton onClick={handleClick}>+</FabButton>
+        <FabButton />
         <Footer />
       </body>
     </html>

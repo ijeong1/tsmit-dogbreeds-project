@@ -18,3 +18,12 @@ export const InquerySchema = z.object({
         .string()
         .min(5, { message: "Message must be at least 5 characters long" }),
 });
+
+export const ReportIssueSchema = z.object({
+    title: z
+        .string()
+        .min(1, { message: "Title is required" }),
+    content: z
+        .string()
+        .min(5, { message: "Content must be at least 5 characters long" }),
+});
