@@ -35,6 +35,39 @@ export const authOptions: NextAuthOptions = {
                 };
             }
         })
+    ],
+    
+    callbacks: {
+        async jwt({ token, user }) {
+            if (user) {
+                token.id = user.id;
+                token.email = user.email;
+            }
+            return token;
+        },
+        async session({ session, token }) {
+            if (token?.sub)
+            {
+                session.user.id = token.sub;
 
-    ]
+            }
+
+            return session;
+        }
+    },
+
+    session: {
+        strategy: "jwt",
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+        updateAge: 24 * 60 * 60 // 24 hours
+    },
+    pages: {
+        signIn: "/auth/signin",
+        // error: "/auth/error", // Error page URL
+        // signOut: "/auth/signout", // Sign out page URL
+        // verifyRequest: "/auth/verify-request", // Verification request page URL
+        newUser: "/register"
+    },
 }
+
+export default NextAuth(authOptions);

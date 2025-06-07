@@ -7,6 +7,9 @@ import Footer from "@/components/Footer";
 import Sidebar from "@/components/Sidebar";
 import { usePathname } from "next/navigation";
 import FabButton from "@/components/FabButton";
+import { SessionProvider } from "next-auth/react";
+import AuthButton from "@/components/AuthButton";
+import SessionWrapper from "@/components/SessionWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +37,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
+        <SessionWrapper>
+          <Navbar>
+            <AuthButton />
+          </Navbar>
+          
         
         <div className="flex min-h-screen">
 
@@ -50,6 +57,7 @@ export default function RootLayout({
         </div>
         <FabButton />
         <Footer />
+        </SessionWrapper>
       </body>
     </html>
   );
