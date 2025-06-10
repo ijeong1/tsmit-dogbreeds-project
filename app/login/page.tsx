@@ -1,8 +1,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
-import React from 'react'
+import { signIn, useSession } from 'next-auth/react';
+import React, { useEffect } from 'react'
 import Link from 'next/link';
 
 export default function LoginPage() {
@@ -10,6 +10,7 @@ export default function LoginPage() {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [error, setError] = React.useState('');
+    const { data: session } = useSession();
     
     const handleLogin = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
@@ -30,6 +31,12 @@ export default function LoginPage() {
         }
 
     };
+
+    useEffect(() => {
+        if (session) 
+            router.push("/my-page");
+    }, [session])
+
   return (
     <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-md max-w-md">
         <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
@@ -64,6 +71,24 @@ export default function LoginPage() {
             >
                 Login
             </button>
+            <div>
+                <button
+                    type="button"
+                    onClick={() => signIn('google')}
+                    className="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                >
+                    Sign in with Google
+                </button>
+            </div>
+            <div>
+                <button
+                    type="button"
+                    onClick={() => signIn('github')}
+                    className="w-full bg-gray-800 text-white py-2 px-4 rounded-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                >
+                    Sign in with GitHub
+                </button>
+            </div>
             {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
             <div className="text-center mt-4 space-y-2">
                 <p className="text-sm text-gray-600">Don't have an account? <Link href="/register" className="text-indigo-600 hover:underline">Register here</Link></p>

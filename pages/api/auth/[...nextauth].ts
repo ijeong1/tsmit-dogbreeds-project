@@ -1,11 +1,16 @@
-import { supabase } from "@/lib/supabaseClient";
 import { NextAuthOptions } from "next-auth"
 import NextAuth from "next-auth/next"
-import CredentialProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
+import GitHubProvider from "next-auth/providers/github";
+import { prisma } from "@/lib/prismaClient";
+import { supabase } from "@/lib/supabaseClient";
+import { id } from "zod/v4/locales";
+import { v4 as uuidv4 } from "uuid";
 
 export const authOptions: NextAuthOptions = {
     providers: [
-        CredentialProvider({
+        CredentialsProvider({
             name: "Email and Password",
             credentials: {
                 email: { label: "Email", type: "text", placeholder: "Email" },
@@ -34,22 +39,68 @@ export const authOptions: NextAuthOptions = {
                     email: data.user.email
                 };
             }
-        })
+        }),
+
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        }),
+
+        GitHubProvider({
+            clientId: process.env.GITHUB_CLIENT_ID!,
+            clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+        }),
     ],
     
     callbacks: {
-        async jwt({ token, user }) {
-            if (user) {
-                token.id = user.id;
-                token.email = user.email;
+        async signIn({ user, account }) {
+            if (account?.provider === "google" ||  account?.provider === "github") {
+                try {
+                    const existingProfile = await prisma.profiles.findUnique({
+                        where: { google_id: user.id },
+                    });
+                    
+                    if (!existingProfile) {
+                        await prisma.profiles.create({
+                            data: {
+                                id : uuidv4(),
+                                google_id: user.id,
+                                name: user.name || "Unnamed",
+                                phone: "",
+                                street: "",
+                                city: "",
+                                state: "",
+                                zipcode: "",
+                            }
+                        })
+                    }
+                    return true;
+                } catch (error) {
+                    console.error("Error creating Google user profile:", error);
+                    return false;
+                }
             }
-            return token;
+            return true;
         },
         async session({ session, token }) {
             if (token?.sub)
             {
                 session.user.id = token.sub;
 
+            }
+
+            // after create profiles table
+            const profile = await prisma.profiles.findUnique({
+                where: { id: token.sub },
+            });
+            // after create profiles table
+            if (profile) {
+                session.user.name = profile.name;
+                session.user.phone = profile.phone;
+                session.user.street = profile.street;
+                session.user.city = profile.city;
+                session.user.state = profile.state;
+                session.user.zipcode = profile.zipcode;
             }
 
             return session;
@@ -63,10 +114,10 @@ export const authOptions: NextAuthOptions = {
     },
     pages: {
         signIn: "/auth/signin",
+        newUser: "/register"
         // error: "/auth/error", // Error page URL
         // signOut: "/auth/signout", // Sign out page URL
         // verifyRequest: "/auth/verify-request", // Verification request page URL
-        newUser: "/register"
     },
 }
 

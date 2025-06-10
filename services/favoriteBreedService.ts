@@ -43,8 +43,8 @@ export async function getAllFavoriteBreeds() {
 
 
 export async function getFavoriteByBreedId(breedId: string) {
-    return prisma.favorite_breeds.findFirst({
-        where: { breeds_id: breedId },
+    return prisma.favorite_breeds.findUnique({
+        where: { id: Number(breedId) },
     });
 }
 
