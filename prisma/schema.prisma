@@ -63,16 +63,18 @@ model flow_state {
 }
 
 model profiles {
-  id         String   @id
-  google_id  String?  @unique
-  created_at DateTime @default(now()) @db.Timestamptz(6)
-  name       String?
-  phone      String?
-  address    String?
-  city       String?
-  state      String?
-  zipcode    String?
-  street     String?
+  id                  String   @id
+  google_id           String?  @unique
+  created_at          DateTime @default(now()) @db.Timestamptz(6)
+  name                String?
+  phone               String?
+  address             String?
+  city                String?
+  state               String?
+  zipcode             String?
+  street              String?
+  stripe_customer_id  String?
+  subscription_status String?
 
   @@schema("public")
 }

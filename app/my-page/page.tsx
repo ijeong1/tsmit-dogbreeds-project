@@ -22,7 +22,7 @@ export default async function MyPage() {
     if (!session?.user) {
         redirect('/login'); // Redirect to login page if not authenticated
     }
-
+    
     return (
         <ClientWrapper session={session} userDataParam={userData}/>
   )

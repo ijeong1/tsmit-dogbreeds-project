@@ -55,6 +55,7 @@ export default function ClientWrapper({
         <p><strong>City:</strong> {userData.city}</p>
         <p><strong>State:</strong> {userData.state}</p>
         <p><strong>Zip Code:</strong> {userData.zipcode}</p>
+        <p><strong>Subscription:</strong> {userData.subscription_status}</p>
       </div>
 
       <div className="text-center mt-6">
@@ -65,6 +66,13 @@ export default function ClientWrapper({
           Update Information
         </button>
       </div>
+
+      <button
+                    onClick={() => router.push("/checkout")}
+                    className="bg-orange-400 text-white px-4 py-2 rounded cursor-pointer"
+                >
+                    Purchase Test
+                </button>
 
       {modalOpen && (
         <UpdateProfileModal
